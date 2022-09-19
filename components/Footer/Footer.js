@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 const Footer = () => {
   return (
@@ -17,7 +18,11 @@ const Footer = () => {
           via Linkdin.
         </p>
         <p className="text-rose-600 font-semibold">
-          Github - Portfolio - Linkdin
+          <Link href="https://github.com/LaurentGourouvin">Github&nbsp;</Link>-
+          <Link href="">&nbsp;Portfolio</Link> -
+          <Link href="https://www.linkedin.com/in/laurentgourouvin/">
+            &nbsp;Linkdin
+          </Link>
         </p>
       </section>
       <section className="container mx-auto">

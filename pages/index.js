@@ -12,7 +12,7 @@ const Home = () => {
     <div className="text-slate-600">
       {/* <Navbar /> */}
       <section className="container-recipe-card ">
-        <CardRecipe titleRecipe={"Crumble aux prunes"} />
+        {/* <CardRecipe titleRecipe={"Crumble aux prunes"} />
         <CardRecipe titleRecipe={"Boudin noir"} />
         <CardRecipe titleRecipe={"Tartiflette"} />
         <CardRecipe titleRecipe={"Tartiflette"} />
@@ -22,9 +22,9 @@ const Home = () => {
         <CardRecipe titleRecipe={"Tartiflette"} />
         <CardRecipe titleRecipe={"Tartiflette"} />
         <CardRecipe titleRecipe={"Tartiflette"} />
-        <CardRecipe titleRecipe={"Tartiflette"} />
+        <CardRecipe titleRecipe={"Tartiflette"} /> */}
 
-        {/* <article className="recipe-card">
+        <article className="recipe-card">
           <Image
             className="rounded-xl"
             src="/images/recette/crumble_aux_prunes.webp"
@@ -257,7 +257,7 @@ const Home = () => {
             height={220}
           />
           <h2 className="text-rose-600 font-light mt-2">Mac and Cheese</h2>
-        </article> */}
+        </article>
       </section>
     </div>
   );
