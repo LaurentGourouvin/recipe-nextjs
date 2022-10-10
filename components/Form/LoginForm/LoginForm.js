@@ -1,12 +1,36 @@
 import { useState } from "react";
+// import { loginUser } from "../../../axios/auth/axios_auth";
+import { useRouter } from "next/router";
+import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { loginUser, currentUser } from "../../../redux/slice/userSlice";
 
 const LoginForm = () => {
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const [errorLogin, setErrorLogin] = useState({ error: false, message: "" });
   const [user, setUser] = useState({
     email: "",
     password: "",
   });
-  const handleSubmit = (e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    const isLogin = await dispatch(loginUser(user));
+    if (isLogin.payload.codeStatus === 404) {
+      setErrorLogin((prevState) => ({
+        ...prevState,
+        error: true,
+        message: "Email ou mot de passe incorrect.",
+      }));
+      return null;
+    }
+    dispatch(currentUser());
+    toast.success("Vous êtes connecté, redirection en cours...");
+
+    setTimeout(() => {
+      router.push("/");
+    }, 1500);
   };
 
   const handleReset = (e) => {
@@ -19,6 +43,11 @@ const LoginForm = () => {
 
   return (
     <form className="py-2" onSubmit={handleSubmit}>
+      {errorLogin.error && (
+        <p className="text-center text-red-500 font-semibold">
+          {errorLogin.message}
+        </p>
+      )}
       <label className="flex flex-col">
         <p className="p-2">Email</p>
         <input

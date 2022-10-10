@@ -1,7 +1,9 @@
 // Next/React Import
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useDispatch, useSelector } from "react-redux";
+import { currentUser } from "../../redux/slice/userSlice";
 
 // Own Import
 import { MenuIcon } from "../elements/icons/MenuIcon";
@@ -12,6 +14,19 @@ import Menu from "../Menu/Menu";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+
+  const dispatch = useDispatch();
+  const isLogged = useSelector((state) => state.user.isLogged);
+
+  useEffect(() => {
+    const fetchUser = () => {
+      dispatch(currentUser());
+    };
+    // vérification si l'utilisateur n'est pas connecté
+    if (!isLogged) {
+      fetchUser();
+    }
+  }, [isLogged, dispatch]);
 
   return (
     <header className="navbar-container fixed w-full z-10">
@@ -34,7 +49,9 @@ const Navbar = () => {
             priority={true}
           />
           <span className="navbar-title">
-            <Link href="/">Recipe</Link>
+            <Link href="/">
+              <a>Recipe</a>
+            </Link>
           </span>
         </p>
         <SearchIcon />
