@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getRequest, postRequest } from "../axios";
+import { getRequest, postRequest, deleteRequest } from "../axios";
 
 export const useGetAllRecipe = (url) => {
   const [data, setData] = useState(null);
@@ -48,9 +48,21 @@ export const useGetRecipeById = (url) => {
 
 export const createRecipe = async (recipe) => {
   try {
-    console.log("AXIOS CREATE RECIPTE", recipe);
     const newRecipe = await postRequest("/recipe/create", recipe);
     return newRecipe;
+  } catch (error) {
+    console.error(error);
+    return {
+      codeStatus: error.response.status,
+      message: error.response.data.errorDescription,
+    };
+  }
+};
+
+export const deleteRecipe = async (payload) => {
+  try {
+    const deleteOneRecipe = await deleteRequest(`/recipe/delete`, payload);
+    return deleteOneRecipe;
   } catch (error) {
     console.error(error);
     return {

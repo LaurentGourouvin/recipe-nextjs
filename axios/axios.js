@@ -18,8 +18,8 @@ export const patchRequest = (url, payload) => {
   return axiosInstance.patch(`${url}`, payload);
 };
 
-export const deleteRequest = (url) => {
-  return axiosInstance.delete(`${url}`);
+export const deleteRequest = (url, payload) => {
+  return axiosInstance.delete(`${url}/${payload}`);
 };
 
 export default axiosInstance;

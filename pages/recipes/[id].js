@@ -14,7 +14,7 @@ const Recipe = () => {
     error,
     loading,
   } = useGetRecipeById(`/recipe/recipebyid/${id}`);
-  console.table(recipe);
+
   return (
     <>
       {loading && <Loading />}
