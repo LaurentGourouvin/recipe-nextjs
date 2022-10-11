@@ -13,6 +13,15 @@ export const userSlice = createSlice({
     id: null,
   },
   reducers: {
+    updateUser: (state, action) => {
+      console.log("action UPDATE USER", action);
+      return {
+        ...state,
+        email: action.payload.user_email,
+        firstname: action.payload.user_firstname,
+        lastname: action.payload.user_lastname,
+      };
+    },
     disconnect: (state) => {
       return {
         ...state,
@@ -62,6 +71,6 @@ export const currentUser = createAsyncThunk("user/currentUser", async () => {
   return response;
 });
 
-export const { disconnect } = userSlice.actions;
+export const { disconnect, updateUser } = userSlice.actions;
 
 export default userSlice.reducer;

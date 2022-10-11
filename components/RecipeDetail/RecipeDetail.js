@@ -21,7 +21,7 @@ const RecipeDetail = (recipe) => {
   };
 
   return (
-    <section className="flex flex-col gap-2">
+    <section className="flex flex-col gap-2 mb-5">
       <header className="flex flex-col items-center">
         <h2 className="text-2xl text-red-500 self-start">
           {recipe.recipe_title}

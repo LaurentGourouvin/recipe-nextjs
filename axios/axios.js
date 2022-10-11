@@ -14,8 +14,8 @@ export const postRequest = (url, payload) => {
   return axiosInstance.post(`${url}`, payload);
 };
 
-export const patchRequest = (url, payload) => {
-  return axiosInstance.patch(`${url}`, payload);
+export const putRequest = (url, payload) => {
+  return axiosInstance.put(`${url}`, payload);
 };
 
 export const deleteRequest = (url, payload) => {

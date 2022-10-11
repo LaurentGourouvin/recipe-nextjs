@@ -1,5 +1,5 @@
 import register from "../../pages/authentification/register";
-import { postRequest } from "../axios";
+import { postRequest, putRequest } from "../axios";
 
 export const loginUser = async (user) => {
   try {
@@ -37,6 +37,15 @@ export const logoutUser = async () => {
   try {
     const resultLogout = await postRequest("/auth/logout");
     return resultLogout;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const updateUser = async (user) => {
+  try {
+    const resultUpdateUser = await putRequest("/auth/update", user);
+    return resultUpdateUser;
   } catch (error) {
     console.error(error);
   }

@@ -1,9 +1,13 @@
 import Image from "next/image";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { updateUser as updateUserFromRedux } from "../../redux/slice/userSlice";
 import { useState } from "react";
+import { updateUser } from "../../axios/auth/axios_auth";
+import { toast } from "react-toastify";
 
 const UpdateProfile = () => {
   const user = useSelector((state) => state.user);
+  const dispatch = useDispatch();
   const [userUpdate, setUserUpdate] = useState({
     firstname: "",
     lastname: "",
@@ -24,8 +28,20 @@ const UpdateProfile = () => {
       firstname: "",
       lastname: "",
       email: "",
-      password: "",
     }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log("envoie du formulaire.");
+    const resultUpdateUser = await updateUser(userUpdate);
+    if (resultUpdateUser.status === 201) {
+      toast.success("Modification réussie !");
+      dispatch(updateUserFromRedux(resultUpdateUser.data));
+    } else {
+      toast.warning("Modification refusée !");
+    }
+    console.log(resultUpdateUser);
   };
   return (
     <>
@@ -56,7 +72,7 @@ const UpdateProfile = () => {
           <h3 className="text-xl font-semibold my-2 text-red-500">
             Formulaire de modification
           </h3>
-          <form className="py-2">
+          <form onSubmit={handleSubmit} className="py-2">
             <label className="flex flex-col">
               <p className="p-2">Nom</p>
               <input
