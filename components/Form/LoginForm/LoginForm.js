@@ -1,9 +1,12 @@
 import { useState } from "react";
-// import { loginUser } from "../../../axios/auth/axios_auth";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
-import { useDispatch } from "react-redux";
-import { loginUser, currentUser } from "../../../redux/slice/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  loginUser,
+  currentUser,
+  getFavorites,
+} from "../../../redux/slice/userSlice";
 
 const LoginForm = () => {
   const dispatch = useDispatch();
@@ -25,7 +28,11 @@ const LoginForm = () => {
       }));
       return null;
     }
-    dispatch(currentUser());
+    await dispatch(currentUser());
+    await dispatch(getFavorites());
+
+    // je récupère la liste des favoris de l'utilisateur
+    //await dispatch(getFavorites(userId));
     toast.success("Vous êtes connecté, redirection en cours...");
 
     setTimeout(() => {

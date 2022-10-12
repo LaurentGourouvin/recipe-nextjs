@@ -53,6 +53,10 @@ const AddRecipe = () => {
       setTimeout(() => {
         router.push(`/recipes/${resultCreateRecipe.data.recipe_id}`);
       }, 1500);
+    } else {
+      toast.warning(
+        "Création de la recette impossible. Merci de vous reconnecter !"
+      );
     }
   };
 

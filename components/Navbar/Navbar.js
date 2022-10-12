@@ -3,7 +3,7 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
-import { currentUser } from "../../redux/slice/userSlice";
+import { currentUser, getFavorites } from "../../redux/slice/userSlice";
 
 // Own Import
 import { MenuIcon } from "../elements/icons/MenuIcon";
@@ -19,8 +19,9 @@ const Navbar = () => {
   const isLogged = useSelector((state) => state.user.isLogged);
 
   useEffect(() => {
-    const fetchUser = () => {
-      dispatch(currentUser());
+    const fetchUser = async () => {
+      await dispatch(currentUser());
+      await dispatch(getFavorites());
     };
     // vérification si l'utilisateur n'est pas connecté
     if (!isLogged) {

@@ -118,7 +118,7 @@ const Menu = ({ isOpen, setIsOpen }) => {
                 </li>
               </Link>
               <li className="p-1 hover:text-red-500 flex gap-1 items-center">
-                <Heart />
+                <Heart style={"w-6 h-6"} />
                 Mes Favoris
               </li>
               <Link href="/profile/create-new-recipe">
