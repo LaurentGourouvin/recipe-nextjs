@@ -33,6 +33,9 @@ const Navbar = () => {
     <header className="navbar-container fixed w-full z-10">
       <section className="navbar-content">
         <button
+          name="button-menu"
+          type="button"
+          aria-label="bouton menu"
           onClick={() => {
             setIsOpen(!isOpen);
           }}

@@ -9,6 +9,10 @@ const nextConfig = {
   publicRuntimeConfig: {
     API_URL: "http://localhost:5050/api",
   },
+  i18n: {
+    locales: ["fr"],
+    defaultLocale: "fr",
+  },
 };
 
 module.exports = nextConfig;

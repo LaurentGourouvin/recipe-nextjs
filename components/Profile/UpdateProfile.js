@@ -4,6 +4,7 @@ import { updateUser as updateUserFromRedux } from "../../redux/slice/userSlice";
 import { useState } from "react";
 import { updateUser } from "../../axios/auth/axios_auth";
 import { toast } from "react-toastify";
+import Link from "next/link";
 
 const UpdateProfile = () => {
   const user = useSelector((state) => state.user);
@@ -57,8 +58,8 @@ const UpdateProfile = () => {
           <li>Mettre à jour votre adresse e-mail</li>
         </ul>
       </section>
-      <section className="flex flex-col sm:flex-row items-center sm:justify-around p-4 m-2">
-        <article>
+      <section className="flex flex-col sm:flex-row items-center sm:justify-between my-2 gap-2">
+        {/* <article>
           <Image
             src="/images/design/Metabolism.svg"
             width={150}
@@ -67,8 +68,35 @@ const UpdateProfile = () => {
             alt="marmitte"
             priority={true}
           />
+        </article> */}
+        <article className="p-2 bg-white rounded-lg shadow-lg sm:self-start border">
+          <h3 className="text-xl font-semibold my-2 text-red-500">
+            Comment modifier votre mot de passe ?
+          </h3>
+          <p>
+            Pour modifier ou tout simplement réinitialiser votre mot passe,
+            veuillez suivre la procédure suivante :
+          </p>
+          <ul className="my-2 p-2 list-decimal list-inside">
+            <li>
+              Cliquez sur le lien suivant:{" "}
+              <Link href="#">
+                <a className="text-rose-500 font-semibold">
+                  Réinitialiser le mot de passe
+                </a>
+              </Link>
+            </li>
+            <li>
+              Un e-mail est envoyé à l&apos;adresse liée à votre compte sur le
+              site.
+            </li>
+            <li>
+              Après avoir cliqué sur le lien contenu dans l&apos;e-mail, vous
+              aurez accès à la modification de celui-ci.
+            </li>
+          </ul>
         </article>
-        <article className="p-2">
+        <article className="p-2 bg-white rounded-lg shadow-lg border">
           <h3 className="text-xl font-semibold my-2 text-red-500">
             Formulaire de modification
           </h3>
@@ -116,7 +144,7 @@ const UpdateProfile = () => {
             <div className="container flex flex-row gap-4 justify-center mt-4">
               <button
                 type="submit"
-                className="rounded bg-rose-600 text-white p-2"
+                className="rounded bg-red-800 text-white p-2"
               >
                 Valider
               </button>

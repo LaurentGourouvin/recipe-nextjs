@@ -37,7 +37,7 @@ const LoginForm = () => {
 
     setTimeout(() => {
       router.push("/");
-    }, 1500);
+    }, 2000);
   };
 
   const handleReset = (e) => {
@@ -49,7 +49,10 @@ const LoginForm = () => {
   };
 
   return (
-    <form className="py-2" onSubmit={handleSubmit}>
+    <form
+      className="p-2 bg-white rounded-lg shadow-md border"
+      onSubmit={handleSubmit}
+    >
       {errorLogin.error && (
         <p className="text-center text-red-500 font-semibold">
           {errorLogin.message}
@@ -79,7 +82,7 @@ const LoginForm = () => {
       </label>
 
       <div className="container flex flex-row gap-4 justify-center mt-4">
-        <button type="submit" className="rounded bg-rose-600 text-white p-2">
+        <button type="submit" className="rounded bg-red-800 text-white p-2">
           Valider
         </button>
         <button

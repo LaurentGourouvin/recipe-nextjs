@@ -9,7 +9,7 @@ import { Provider } from "react-redux";
 function MyApp({ Component, pageProps }) {
   return (
     <Provider store={store}>
-      <div className="flex flex-col min-h-screen">
+      <div className="flex flex-col min-h-screen bg-app">
         <Navbar />
         <main className="wrap-container grow">
           <Component {...pageProps} />

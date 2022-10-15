@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { getRequest, postRequest, deleteRequest } from "../axios";
+import axios from "axios";
 
 export const useGetAllRecipe = (url) => {
   const [data, setData] = useState(null);
@@ -7,10 +8,16 @@ export const useGetAllRecipe = (url) => {
   const [loading, setLoader] = useState(true);
 
   useEffect(() => {
-    getRequest("/recipe")
+    const CancelToken = axios.CancelToken;
+    const source = CancelToken.source();
+    getRequest("/recipe", { cancelToken: source.token })
       .then((res) => setData(res.data))
       .catch((err) => setError(err))
       .finally(() => setLoader(false));
+
+    return () => {
+      source.cancel();
+    };
   }, []);
 
   return { data, error, loading };

@@ -11,7 +11,9 @@ const Recipes = () => {
         <title>Mes recettes</title>
       </Head>
       <div className="container p-2">
-        {!user.isLogged && <p>Vous n&apos;êtes pas connecté</p>}
+        {!user.isLogged && (
+          <p className="text-lg text-white">Vous n&apos;êtes pas connecté</p>
+        )}
         {user.isLogged && (
           <>
             <MenuProfile />

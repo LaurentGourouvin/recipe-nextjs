@@ -10,11 +10,11 @@ import { useClickOutSide } from "../../hooks/useClickOutSide";
 import { UserIcon } from "../elements/icons/UserIcon";
 import { Heart } from "../elements/icons/Heart";
 import { Leave } from "../elements/icons/Leave";
-import { FolderPlus } from "../elements/icons/FolderPlus";
 import { Cake } from "../elements/icons/Cake";
 import { disconnect } from "../../redux/slice/userSlice";
 import { logoutUser } from "../../axios/auth/axios_auth";
 import { toast } from "react-toastify";
+import { PlusCircle } from "../elements/icons/PlusCircle";
 
 const Menu = ({ isOpen, setIsOpen }) => {
   const refMenu = useClickOutSide(() => setIsOpen(false));
@@ -88,7 +88,7 @@ const Menu = ({ isOpen, setIsOpen }) => {
         )}
         {isLogged && (
           <>
-            <p>
+            <p className="text-black">
               Bonjour{" "}
               <span className="italic text-red-500">{`${user.firstname} ${user.lastname}`}</span>
             </p>
@@ -97,6 +97,7 @@ const Menu = ({ isOpen, setIsOpen }) => {
                 <li className="p-1 hover:text-red-500 flex gap-1 items-center">
                   <UserIcon />
                   <a
+                    id="profil-link"
                     onClick={() => {
                       setIsOpen(false);
                     }}
@@ -109,6 +110,7 @@ const Menu = ({ isOpen, setIsOpen }) => {
                 <li className="p-1 hover:text-red-500 flex gap-1 items-center">
                   <Cake />
                   <a
+                    id="recipe-link"
                     onClick={() => {
                       setIsOpen(false);
                     }}
@@ -117,14 +119,24 @@ const Menu = ({ isOpen, setIsOpen }) => {
                   </a>
                 </li>
               </Link>
-              <li className="p-1 hover:text-red-500 flex gap-1 items-center">
-                <Heart style={"w-6 h-6"} />
-                Mes Favoris
-              </li>
+              <Link href="/profile/favorites">
+                <li className="p-1  flex gap-1 items-center">
+                  <Heart style={"w-6 h-6"} />
+                  <a
+                    id="favorites-link"
+                    onClick={() => {
+                      setIsOpen(false);
+                    }}
+                  >
+                    Mes Favoris
+                  </a>
+                </li>
+              </Link>
               <Link href="/profile/create-new-recipe">
                 <li className="p-1 hover:text-red-500 flex gap-1 items-center">
-                  <FolderPlus />
+                  <PlusCircle />
                   <a
+                    id="new-recipe-link"
                     onClick={() => {
                       setIsOpen(false);
                     }}

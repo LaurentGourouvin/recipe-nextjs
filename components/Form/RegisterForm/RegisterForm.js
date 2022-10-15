@@ -68,7 +68,10 @@ const RegisterForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="py-2">
+    <form
+      onSubmit={handleSubmit}
+      className="p-2 bg-white border shadow-md rounded-lg"
+    >
       {error.isError && (
         <p className="text-center text-red-500 font-semibold">
           {error.message}
@@ -148,7 +151,7 @@ const RegisterForm = () => {
         <button
           type="submit"
           onClick={() => checkPassword(user.password, user.confirmPassword)}
-          className="rounded bg-rose-600 text-white p-2"
+          className="rounded bg-red-800 text-white p-2"
         >
           Valider
         </button>
