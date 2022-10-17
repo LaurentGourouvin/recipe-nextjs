@@ -8,12 +8,14 @@ import Text from "@tiptap/extension-text";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
+import { useSelector } from "react-redux";
 
 // Import Own Module
 import Tiptap from "../Tiptap/Tiptap";
 import { createRecipe } from "../../axios/recipe/axios_recipe";
 import { useGetAllIngredients } from "../../axios/ingredient/ingredient";
 import { MinusCircle } from "../elements/icons/MinusCircle";
+import PreviewRecipe from "./PreviewRecipe";
 
 const AddRecipe = () => {
   // Objet de configuration pour l'éditeur de texte
@@ -35,6 +37,8 @@ const AddRecipe = () => {
 
   // State [A REFACTORISER]
   const router = useRouter();
+  const user = useSelector((state) => state.user);
+  const [previewIsOpen, setPreviewIsOpen] = useState(false);
   const [recipeTitle, setRecipeTitle] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
   const [ingredientsForRecipe, setIngredientsForRecipe] = useState([]);
@@ -150,9 +154,16 @@ const AddRecipe = () => {
     setUnit((prevState) => "");
   };
 
+  // Gestion de la prevew de la recette
+  const handleClickPreview = (e) => {
+    console.log("clique sur le bouton de preview");
+    setPreviewIsOpen(true);
+  };
   // Envoie du formulaire
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // Je passe la preview a false au cas ou l'utilisateur ne l'a pas fermé
+    setPreviewIsOpen(false);
     // Je remets à zéro mes erreurs avant chaque verification de champs pour l'envoie des données
     setErrorForm((prevState) => ({ duration: "", person: "", ingredient: "" }));
 
@@ -205,8 +216,6 @@ const AddRecipe = () => {
       }
     }
 
-    // A REACTIVER POUR L'ENVOIE DES DONNEES A L'API !!!!
-
     const resultCreateRecipe = await createRecipe(formData);
     if (resultCreateRecipe.status === 201) {
       toast.success("Recette créee ! Redirection en cours...");
@@ -228,7 +237,7 @@ const AddRecipe = () => {
 
   return (
     <>
-      <section className="my-2 bg-slate-800 text-white p-2 rounded-lg shadow-md">
+      <section className="my-2 bg-slate-800 text-white p-2 rounded-lg shadow-md relative">
         <h3 className="text-lg text-center ">
           Envie de partager vos talents culinaire avec la communauté ? Vous êtes
           au bon endroit ! A vous de jouer !
@@ -367,7 +376,7 @@ const AddRecipe = () => {
               </label>
               <button
                 type="button"
-                className="rounded bg-red-800 text-white p-1 my-2"
+                className="rounded bg-green-600 text-white text-sm p-1 my-2"
                 onClick={handleClickAddIngredient}
               >
                 Ajouter l&apos;ingrédient
@@ -409,24 +418,39 @@ const AddRecipe = () => {
           <div className="container flex flex-row gap-4 justify-center mt-4">
             <button
               type="submit"
-              className="rounded bg-red-800 text-white border p-2 shadow-md"
+              className="rounded bg-green-600 text-white border p-2 shadow-md"
             >
               Valider la recette
             </button>
             <button
               type="button"
-              className="rounded bg-white text-black border p-2 shadow-md"
+              className="rounded bg-blue-600 text-white border p-2 shadow-md"
+              onClick={handleClickPreview}
             >
               Aperçu de la recette
             </button>
             <button
               type="reset"
-              className="rounded bg-slate-800 text-white border p-2 shadow-md"
+              className="rounded bg-red-800 text-white border p-2 shadow-md"
             >
               Annuler
             </button>
           </div>
         </form>
+
+        {previewIsOpen && (
+          <PreviewRecipe
+            setPreviewIsOpen={setPreviewIsOpen}
+            recipeTitle={recipeTitle}
+            recipeImage={!selectedFile ? "" : URL.createObjectURL(selectedFile)}
+            recipeDescription={editor.getHTML()}
+            recipeIngredients={ingredientsForRecipe}
+            recipePerson={person}
+            recipeDuration={duration}
+            recipeLevel={level}
+            recipeAuthor={`${user.firstname} ${user.lastname}`}
+          />
+        )}
       </section>
     </>
   );

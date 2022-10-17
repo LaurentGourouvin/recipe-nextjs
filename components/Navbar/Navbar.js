@@ -9,12 +9,12 @@ import { currentUser, getFavorites } from "../../redux/slice/userSlice";
 import { MenuIcon } from "../elements/icons/MenuIcon";
 import { SearchIcon } from "../elements/icons/SearchIcon";
 import { CancelIconCircle } from "../elements/icons/CancelIconCircle";
-
+import SearchBar from "../SearchBar/SearchBar";
 import Menu from "../Menu/Menu";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-
+  const [searchBarIsOpen, setSearchBarIsOpen] = useState(false);
   const dispatch = useDispatch();
   const isLogged = useSelector((state) => state.user.isLogged);
 
@@ -58,10 +58,23 @@ const Navbar = () => {
             </Link>
           </span>
         </p>
-        <SearchIcon />
+        <button
+          name="button-search-bar"
+          type="button"
+          aria-label="button searchbar"
+          onClick={() => {
+            setSearchBarIsOpen(!searchBarIsOpen);
+          }}
+        >
+          <SearchIcon />
+        </button>
       </section>
 
       <Menu isOpen={isOpen} setIsOpen={setIsOpen} />
+      <SearchBar
+        searchBarIsOpen={searchBarIsOpen}
+        setSearchBarIsOpen={setSearchBarIsOpen}
+      />
     </header>
   );
 };

@@ -32,6 +32,7 @@ const CardRecipe = ({
   recipe_duration,
   recipe_person,
   recipe_level,
+  setSearchBarIsOpen,
 }) => {
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -95,14 +96,19 @@ const CardRecipe = ({
   return (
     <article className="recipe-card relative bg-white border border-slate-300">
       <div className="mx-auto">
-        <Image
-          src={recipe_image_small}
-          alt={`illustration de ${recipe_title}`}
-          layout="fixed"
-          height={200}
-          width={200}
-          priority={true}
-        />
+        <Link href={`/recipes/${recipe_id}`}>
+          <a onClick={() => setSearchBarIsOpen(false)}>
+            <Image
+              src={recipe_image_small}
+              alt={`illustration de ${recipe_title}`}
+              layout="fixed"
+              height={200}
+              width={200}
+              priority={true}
+              className="hover:cursor-pointer"
+            />
+          </a>
+        </Link>
       </div>
 
       <div className="recipe-card-informations">
@@ -118,7 +124,10 @@ const CardRecipe = ({
         </p>
       </div>
       <Link href={`/recipes/${recipe_id}`}>
-        <a className="hover:cursor-pointer">
+        <a
+          onClick={() => setSearchBarIsOpen(false)}
+          className="hover:cursor-pointer"
+        >
           <h2 className="text-slate-700 font-light text-xl mt-2 text-center">
             {recipe_title}
           </h2>

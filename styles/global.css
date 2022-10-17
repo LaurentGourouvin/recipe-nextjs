@@ -8,6 +8,9 @@
     /* @apply bg-[url('/images/design/bg-repeat-cook.png')] bg-repeat bg-contain bg-blend-soft-light bg-slate-100; */
     @apply bg-[url('/images/design/bg-repeat-cook.webp')] bg-repeat bg-contain bg-blend-overlay bg-rose-50;
   }
+  .bg-app-searchbar {
+    @apply bg-slate-200;
+  }
   a {
     @apply cursor-pointer;
   }

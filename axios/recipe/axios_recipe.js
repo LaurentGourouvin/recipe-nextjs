@@ -53,6 +53,21 @@ export const useGetRecipeById = (url) => {
   return { data, error, loading };
 };
 
+export const getRecipeByName = async (recipeName) => {
+  try {
+    const searchRecipe = await getRequest(`/recipe/${recipeName}`);
+
+    console.log(recipeName);
+    console.log("je suis dans getRecipeByName");
+    console.log(searchRecipe);
+    return searchRecipe;
+  } catch (error) {
+    return {
+      codeStatus: error.response.status,
+      message: error.response.data.errorDescription,
+    };
+  }
+};
 export const createRecipe = async (recipe) => {
   try {
     const newRecipe = await postRequest("/recipe/create", recipe);
