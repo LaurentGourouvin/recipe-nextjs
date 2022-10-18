@@ -1,4 +1,4 @@
-export const CancelIconCircle = ({ style }) => {
+export const Check = ({ style }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -11,7 +11,7 @@ export const CancelIconCircle = ({ style }) => {
       <path
         strokeLinecap="round"
         strokeLinejoin="round"
-        d="M6 18L18 6M6 6l12 12"
+        d="M4.5 12.75l6 6 9-13.5"
       />
     </svg>
   );

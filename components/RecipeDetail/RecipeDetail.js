@@ -3,6 +3,7 @@ import Head from "next/head";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 // Import Own Module
 import { Edit } from "../elements/icons/Edit";
@@ -54,7 +55,12 @@ const RecipeDetail = (recipe) => {
           <p className="self-end flex p-2">
             {user.id === recipe.user_id ? (
               <>
-                <Edit />
+                <Link href={`/profile/update-recipe/${recipe.recipe_id}`}>
+                  <a>
+                    <Edit />
+                  </a>
+                </Link>
+
                 <button
                   name="delete-recipe-button"
                   aria-label="delete recipe button"

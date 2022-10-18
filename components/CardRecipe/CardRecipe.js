@@ -32,6 +32,7 @@ const CardRecipe = ({
   recipe_duration,
   recipe_person,
   recipe_level,
+  searchBarIsOpen,
   setSearchBarIsOpen,
 }) => {
   const user = useSelector((state) => state.user);
@@ -97,7 +98,13 @@ const CardRecipe = ({
     <article className="recipe-card relative bg-white border border-slate-300">
       <div className="mx-auto">
         <Link href={`/recipes/${recipe_id}`}>
-          <a onClick={() => setSearchBarIsOpen(false)}>
+          <a
+            onClick={() => {
+              if (searchBarIsOpen) {
+                setSearchBarIsOpen(false);
+              }
+            }}
+          >
             <Image
               src={recipe_image_small}
               alt={`illustration de ${recipe_title}`}
@@ -125,7 +132,11 @@ const CardRecipe = ({
       </div>
       <Link href={`/recipes/${recipe_id}`}>
         <a
-          onClick={() => setSearchBarIsOpen(false)}
+          onClick={() => {
+            if (searchBarIsOpen) {
+              setSearchBarIsOpen(false);
+            }
+          }}
           className="hover:cursor-pointer"
         >
           <h2 className="text-slate-700 font-light text-xl mt-2 text-center">

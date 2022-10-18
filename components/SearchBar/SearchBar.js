@@ -56,6 +56,7 @@ const SearchBar = ({ searchBarIsOpen, setSearchBarIsOpen }) => {
                 {recipes.map((oneRecipe) => (
                   <CardRecipe
                     key={oneRecipe.recipe_id}
+                    searchBarIsOpen={searchBarIsOpen}
                     setSearchBarIsOpen={setSearchBarIsOpen}
                     {...oneRecipe}
                   />

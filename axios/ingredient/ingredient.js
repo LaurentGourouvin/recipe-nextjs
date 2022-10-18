@@ -30,3 +30,27 @@ export const useGetIngredientsByRecipe = (recipeId) => {
 
   return { data, error, loading };
 };
+
+export const getIngredientByRecipeId = async (id) => {
+  try {
+    const searchIngredient = await getRequest(`/ingredient/${id}`);
+    return searchIngredient;
+  } catch (error) {
+    return {
+      codeStatus: error.response.status,
+      message: error.response.data.errorDescription,
+    };
+  }
+};
+
+export const getAllIngredients = async () => {
+  try {
+    const searchIngredients = await getRequest(`/ingredient`);
+    return searchIngredients;
+  } catch (error) {
+    return {
+      codeStatus: error.response.status,
+      message: error.response.data.errorDescription,
+    };
+  }
+};

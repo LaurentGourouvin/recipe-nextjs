@@ -40,7 +40,7 @@ const Navbar = () => {
             setIsOpen(!isOpen);
           }}
         >
-          {isOpen ? <CancelIconCircle /> : <MenuIcon />}
+          {isOpen ? <CancelIconCircle style={"h-6 w-6"} /> : <MenuIcon />}
         </button>
 
         <p className="navbar-image-title">
