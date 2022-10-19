@@ -6,20 +6,16 @@ import {
 } from "../axios/likeFavorites/likeFavorites";
 
 // Fonction permettant l'ajout ou le retrait d'une recette dans les favoris
-export const updateRecipeFavorite = async (userData, recipeId, recipeTitle) => {
+export const updateRecipeFavorite = async (userFavoris, recipeId) => {
   // Je dois vérifier dans la liste des favoris de l'utilisateur si la recette existe
-  const resultFindFavoriteRecipe = userData.favorites.find(
-    (oneRecipe) => oneRecipe.recipe_id === recipeId
-  );
+  const resultFindFavoriteRecipe = userFavoris.find((oneRecipe) => oneRecipe.recipe_id === recipeId);
 
   if (!resultFindFavoriteRecipe) {
     // Je vérifie qu'une relation entre la recette et l'utilisateur existe dans la base de donnée
     // Si aucune relation n'existe, je la crée
     const favoritesUser = await getFavoritesOrLikeByRecipeId(recipeId);
     if (favoritesUser.data === "") {
-      const defaultFavoriteLikeInDB = await createDefaultFavorite(
-        Number(recipeId)
-      );
+      const defaultFavoriteLikeInDB = await createDefaultFavorite(Number(recipeId));
     }
     // Je mets la recette en favoris dans la base de donnée
     const resultUpdate = await updateFavorite(Number(recipeId), true);
@@ -34,18 +30,14 @@ export const updateRecipeFavorite = async (userData, recipeId, recipeTitle) => {
 // Fonction permettant l'ajout ou le retrait d'une recette dans les likes
 export const updateRecipeLike = async (userData, recipeId, recipeTitle) => {
   // Je dois vérifier dans la liste des favoris de l'utilisateur si la recette existe
-  const resultFindLikeRecipe = userData.likes.find(
-    (oneRecipe) => oneRecipe.recipe_id === recipeId
-  );
+  const resultFindLikeRecipe = userData.likes.find((oneRecipe) => oneRecipe.recipe_id === recipeId);
 
   if (!resultFindLikeRecipe) {
     // Je vérifie qu'une relation entre la recette et l'utilisateur existe dans la base de donnée
     // Si aucune relation n'existe, je la crée
     const likesUser = await getFavoritesOrLikeByRecipeId(recipeId);
     if (likesUser.data === "") {
-      const defaultFavoriteLikeInDB = await createDefaultFavorite(
-        Number(recipeId)
-      );
+      const defaultFavoriteLikeInDB = await createDefaultFavorite(Number(recipeId));
     }
     // Je mets la recette en favoris dans la base de donnée
     const resultUpdate = await updateLike(Number(recipeId), true);
@@ -55,4 +47,20 @@ export const updateRecipeLike = async (userData, recipeId, recipeTitle) => {
     const resultUpdate = await updateLike(Number(recipeId), false);
     return false;
   }
+};
+
+// Permet de vérifier si une recette est dans la liste des favoris
+// Retourne True si les favoris est dans la liste sinon FALSE
+export const isFavoriteInFavoritesList = (arrayFavorites, recipeId) => {
+  const ifExist = arrayFavorites.find((favorite) => favorite.recipe_id === recipeId);
+  if (ifExist) return true;
+  return false;
+};
+
+// Permet de vérifier si une recette est dans la liste des like
+// Retourne True si le Like est dans la liste sinon FALSE
+export const isLikeInLikesList = (arrayLikes, recipeId) => {
+  const ifExist = arrayLikes.find((favorite) => favorite.recipe_id === recipeId);
+  if (ifExist) return true;
+  return false;
 };

@@ -1,9 +1,6 @@
 import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
 import { loginUser as login } from "../../axios/auth/axios_auth";
-import {
-  getFavorites as axiosGetFavorites,
-  getLikes as axiosGetLikes,
-} from "../../axios/likeFavorites/likeFavorites";
+import { getFavorites as axiosGetFavorites, getLikes as axiosGetLikes } from "../../axios/likeFavorites/likeFavorites";
 import { getCurrentUser } from "../../axios/auth/axios_auth";
 
 export const userSlice = createSlice({
@@ -37,19 +34,17 @@ export const userSlice = createSlice({
     },
     deleteOneFavorite: (state, action) => {
       const favoritesList = state.favorites;
-      const newFavoritesList = favoritesList.filter(
-        (recipe) => recipe.recipe_id !== action.payload
-      );
+      const newFavoritesList = favoritesList.filter((recipe) => recipe.recipe_id !== action.payload.recipe_id);
       return {
         ...state,
         favorites: newFavoritesList,
       };
     },
+
+    // A MODIFIER PAR RAPPORT AU LIKE ET NON RECIPE
     deleteOneLike: (state, action) => {
       const likesList = state.likes;
-      const newLikesList = likesList.filter(
-        (recipe) => recipe.recipe_id !== action.payload
-      );
+      const newLikesList = likesList.filter((recipe) => recipe.recipe_id !== action.payload);
       return { ...state, likes: newLikesList };
     },
     disconnect: (state) => {
@@ -124,34 +119,22 @@ export const currentUser = createAsyncThunk("user/currentUser", async () => {
   return response;
 });
 
-export const getFavorites = createAsyncThunk(
-  "user/getFavorites",
-  async (userId, { getState }) => {
-    const state = getState();
-    if (userId === null || userId === undefined) userId = state.user.id;
-    const response = await axiosGetFavorites(userId);
+export const getFavorites = createAsyncThunk("user/getFavorites", async (userId, { getState }) => {
+  const state = getState();
+  if (userId === null || userId === undefined) userId = state.user.id;
+  const response = await axiosGetFavorites(userId);
 
-    return response.data;
-  }
-);
+  return response.data;
+});
 
-export const getLikes = createAsyncThunk(
-  "user/getLikes",
-  async (userId, { getState }) => {
-    const state = getState();
-    if (userId === null || userId === undefined) userId = state.user.id;
-    const response = await axiosGetLikes(userId);
+export const getLikes = createAsyncThunk("user/getLikes", async (userId, { getState }) => {
+  const state = getState();
+  if (userId === null || userId === undefined) userId = state.user.id;
+  const response = await axiosGetLikes(userId);
 
-    return response.data;
-  }
-);
-export const {
-  disconnect,
-  updateUser,
-  addOneFavorite,
-  deleteOneFavorite,
-  addOneLike,
-  deleteOneLike,
-} = userSlice.actions;
+  return response.data;
+});
+export const { disconnect, updateUser, addOneFavorite, deleteOneFavorite, addOneLike, deleteOneLike } =
+  userSlice.actions;
 
 export default userSlice.reducer;

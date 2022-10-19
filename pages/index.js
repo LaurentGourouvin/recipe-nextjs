@@ -4,13 +4,13 @@ import Image from "next/image";
 import Head from "next/head";
 
 // Own import
-import CardRecipe from "../components/CardRecipe/CardRecipe";
 import Loading from "../components/Loading/Loading";
 import { useGetAllRecipe } from "../axios/recipe/axios_recipe";
+import RecipesList from "../components/Recipes/";
 
 const Home = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { data: recipes, error, loading } = useGetAllRecipe("/recipe");
+  const { data: recipes, loading } = useGetAllRecipe("/recipe");
 
   return (
     <>
@@ -38,26 +38,15 @@ const Home = () => {
               priority={true}
             />
             <p>
-              Vous ne savez pas quoi à faire manger ce soir ? Vous voulez
-              préparer un planning de repas pour les semaines à venir ?
+              Vous ne savez pas quoi à faire manger ce soir ? Vous voulez préparer un planning de repas pour les
+              semaines à venir ?
             </p>
-            <p>
-              N&apos;hésitez plus, notre communauté vos proposes des recettes
-              parfaite pour vous aider !
-            </p>
-            <p>
-              Parcourez notre site afin de trouver LA recette qui vous convient
-              !
-            </p>
+            <p>N&apos;hésitez plus, notre communauté vos proposes des recettes parfaite pour vous aider !</p>
+            <p>Parcourez notre site afin de trouver LA recette qui vous convient !</p>
           </article>
         </section>
-        <section className="container-recipe-card rounded-lg p-2">
-          {loading && <Loading />}
-          {recipes &&
-            recipes.map((oneRecipe) => (
-              <CardRecipe key={oneRecipe.recipe_id} {...oneRecipe} />
-            ))}
-        </section>
+        {loading && <Loading />}
+        {!loading && <RecipesList data={recipes} />}
       </div>
     </>
   );
