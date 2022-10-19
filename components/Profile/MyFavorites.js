@@ -1,15 +1,11 @@
-import { useGetFavoritesByUserId } from "../../axios/likeFavorites/likeFavorites";
-import Loading from "../Loading/Loading";
-import CardRecipe from "../CardRecipe/CardRecipe";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useSelector } from "react-redux";
+import RecipesList from "../Recipes";
 
 const MyFavorites = (props) => {
   const user = useSelector((state) => state.user);
 
-  useEffect(() => {
-    console.log("composant");
-  }, [user.favorites.lentgh]);
+  useEffect(() => {}, [user.favorites.lentgh]);
 
   return (
     <>
@@ -18,9 +14,7 @@ const MyFavorites = (props) => {
       </section>
       <section className="container-recipe-card">
         {user.favorites.length > 0 ? (
-          user.favorites.map((recipe) => (
-            <CardRecipe key={recipe.recipe_id} {...recipe} />
-          ))
+          <RecipesList data={user.favorites} />
         ) : (
           <p>Vous n&apos;avez aucune recette en favoris :(</p>
         )}

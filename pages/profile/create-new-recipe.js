@@ -1,7 +1,10 @@
+// Import node_module
 import { useSelector } from "react-redux";
-import AddRecipe from "../../components/Profile/AddRecipe";
-import MenuProfile from "../../components/Profile/MenuProfile";
 import Head from "next/head";
+
+// Import Own Module
+import MenuProfile from "../../components/Profile/MenuProfile";
+import CreateRecipeForm from "../../components/Form/CreateRecipeForm/CreateRecipeForm";
 
 const Profile = () => {
   const user = useSelector((state) => state.user);
@@ -15,13 +18,11 @@ const Profile = () => {
         <title>Création d&apos;une nouvelle recette</title>
       </Head>
       <div className="container p-2">
-        {!user.isLogged && (
-          <p className="text-lg text-white">Vous n&apos;êtes pas connecté</p>
-        )}
+        {!user.isLogged && <p className="text-lg text-white">Vous n&apos;êtes pas connecté</p>}
         {user.isLogged && (
           <>
             <MenuProfile />
-            <AddRecipe />
+            <CreateRecipeForm />
           </>
         )}
       </div>

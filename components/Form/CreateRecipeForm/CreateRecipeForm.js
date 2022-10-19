@@ -11,13 +11,13 @@ import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 
 // Import Own Module
-import Tiptap from "../Tiptap/Tiptap";
-import { createRecipe } from "../../axios/recipe/axios_recipe";
-import { useGetAllIngredients } from "../../axios/ingredient/ingredient";
-import { MinusCircle } from "../elements/icons/MinusCircle";
-import PreviewRecipe from "./PreviewRecipe";
+import Tiptap from "../../Tiptap/Tiptap";
+import { createRecipe } from "../../../axios/recipe/axios_recipe";
+import { useGetAllIngredients } from "../../../axios/ingredient/ingredient";
+import { MinusCircle } from "../../elements/icons/MinusCircle";
+import PreviewRecipe from "../../Profile/PreviewRecipe";
 
-const AddRecipe = () => {
+const CreateRecipeForm = () => {
   // Objet de configuration pour l'éditeur de texte
   const editor = useEditor({
     extensions: [
@@ -31,144 +31,138 @@ const AddRecipe = () => {
         },
       }),
     ],
-    content:
-      "<h1>Comment réaliser ma recette de carotte ?</h1> <p>Dans une premier temps...</p>",
+    content: "<h1>Comment réaliser ma recette de carotte ?</h1> <p>Dans une premier temps...</p>",
   });
 
-  // State [A REFACTORISER]
+  // State
   const router = useRouter();
   const user = useSelector((state) => state.user);
   const [previewIsOpen, setPreviewIsOpen] = useState(false);
-  const [recipeTitle, setRecipeTitle] = useState("");
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [ingredientsForRecipe, setIngredientsForRecipe] = useState([]);
-  const [quantity, setQuantity] = useState(0);
-  const [level, setLevel] = useState("");
-  const [duration, setDuration] = useState(0);
-  const [person, setPerson] = useState(0);
-  const [unit, setUnit] = useState("");
+  const [newRecipe, setNewRecipe] = useState({
+    recipeTitle: "",
+    selectedFile: null,
+    ingredientsForRecipe: [],
+    selectIngredient: { id: null, name: "", quantity: 0, unit: "unité" },
+    quantity: 0,
+    level: "",
+    duration: 0,
+    unit: "",
+  });
+
   const [errorForm, setErrorForm] = useState({
     duration: "",
     person: "",
     ingredient: "",
   });
-  const [selectIngredient, setSelectIngredient] = useState({
-    id: null,
-    name: "",
-    quantity: 0,
-    unit: "unité",
-  });
+
   const { error, data: ingredientsList } = useGetAllIngredients();
 
   // Contrôle du champ title
   const handleChangeTitle = (e) => {
-    setRecipeTitle(e.target.value);
+    setNewRecipe((prevState) => ({ ...prevState, recipeTitle: e.target.value }));
   };
 
   // Contrôle du champ file
   const handleChangeSelectedFile = (e) => {
-    setSelectedFile(e.target.files[0]);
+    setNewRecipe((prevState) => ({ ...prevState, selectedFile: e.target.files[0] }));
   };
 
   // Gestion de la liste des ingredients
   const handleChangeSelectedIngredient = (e) => {
-    const ingredient = ingredientsList.find(
-      (ingredient) => ingredient.ingredient_name === e.target.value
-    );
-
-    setSelectIngredient((prevState) => ({
+    // Je récupère mon ingrédient dans ma liste afin de récupérer son ID
+    const ingredient = ingredientsList.find((ingredient) => ingredient.ingredient_name === e.target.value);
+    setNewRecipe((prevState) => ({
       ...prevState,
-      id: ingredient?.ingredient_id,
-      name: e.target.value,
+      selectIngredient: { ...newRecipe.selectIngredient, id: ingredient?.ingredient_id, name: e.target.value },
     }));
   };
 
   // Contrôle du champ unit
   const handleChangeUnit = (e) => {
-    setUnit((prevState) => e.target.value);
-    setSelectIngredient((prevState) => ({
+    setNewRecipe((prevState) => ({ ...prevState, unit: e.target.value }));
+    setNewRecipe((prevState) => ({
       ...prevState,
-      unit: e.target.value,
+      selectIngredient: { ...newRecipe.selectIngredient, unit: e.target.value },
     }));
   };
 
   // Contrôle du champ quantity
   const handleChangeQuantity = (e) => {
-    setQuantity((prevState) => e.target.value);
-    setSelectIngredient((prevState) => ({
+    setNewRecipe((prevState) => ({ ...prevState, quantity: e.target.value }));
+    setNewRecipe((prevState) => ({
       ...prevState,
-      quantity: Number(e.target.value),
+      selectIngredient: { ...newRecipe.selectIngredient, quantity: Number(e.target.value) },
     }));
   };
 
   // Contrôle du champ person
   const handleChangePerson = (e) => {
-    setPerson((prevState) => Number(e.target.value));
+    setNewRecipe((prevState) => ({ ...prevState, person: Number(e.target.value) }));
   };
 
   // Contrôle du champ duration
   const handleChangeDuration = (e) => {
-    setDuration((prevState) => Number(e.target.value));
+    setNewRecipe((prevState) => ({ ...prevState, duration: Number(e.target.value) }));
   };
 
   // Contrôle du champ level
   const handleChangeLevel = (e) => {
-    setLevel((prevState) => e.target.value);
+    setNewRecipe((prevState) => ({ ...prevState, level: e.target.value }));
   };
 
   // Fonction pour retirer un ingrédient de la liste
   const handleClickRemoveIngredient = (id) => {
-    // je supprime l'ingrédiant ayant l'$id de la liste
-    const listToFilter = ingredientsForRecipe.filter(
-      (ingredient) => ingredient.id !== id
-    );
-    setIngredientsForRecipe((prevState) => listToFilter);
+    // je supprime l'ingrédient ayant l'$id de la liste
+    const listToFilter = newRecipe.ingredientsForRecipe.filter((ingredient) => ingredient.id !== id);
+    setNewRecipe((prevState) => ({ ...prevState, ingredientsForRecipe: listToFilter }));
   };
 
   // Fonction pour ajouter des ingrédients à la nouvelle recette
   const handleClickAddIngredient = (e) => {
     // Vérification pour éviter les doublons
-    const checkDuplicate = ingredientsForRecipe.find(
-      (ingredient) => ingredient.id === selectIngredient.id
+    const checkDuplicate = newRecipe.ingredientsForRecipe.find(
+      (ingredient) => ingredient.id === newRecipe.selectIngredient.id
     );
     // Si l'utilisateur sélectionne l'option par défaut, je quitte la fonction
-    if (selectIngredient?.id === undefined) return null;
+    if (newRecipe.selectIngredient?.id === undefined) return null;
 
-    if (quantity === 0 || unit === "") {
-      toast.warning(
-        "Merci de selectionner une quantité et une unité de mesure !"
-      );
+    if (newRecipe.quantity === 0 || newRecipe.unit === "") {
+      toast.warning("Merci de selectionner une quantité et une unité de mesure !");
 
       return null;
     }
     // Si pas de doublons, je l'ajoute à la liste
     if (!checkDuplicate) {
-      setIngredientsForRecipe((prevState) =>
-        ingredientsForRecipe.concat(selectIngredient)
-      );
+      setNewRecipe((prevState) => ({
+        ...prevState,
+        ingredientsForRecipe: newRecipe.ingredientsForRecipe.concat(newRecipe.selectIngredient),
+      }));
       setErrorForm((prevState) => ({ ...prevState, ingredient: "" }));
     }
 
     // Après l'ajout d'un ingrédient je remets les champs quantity et unit aux valeur initiales
-    setQuantity((prevState) => 0);
-    setUnit((prevState) => "");
+    setNewRecipe((prevState) => ({ ...prevState, quantity: 0 }));
+    setNewRecipe((prevState) => ({ ...prevState, unit: "" }));
   };
 
-  // Gestion de la prevew de la recette
+  // Gestion de la preview de la recette
   const handleClickPreview = (e) => {
-    console.log("clique sur le bouton de preview");
     setPreviewIsOpen(true);
   };
+
   // Envoie du formulaire
   const handleSubmit = async (e) => {
     e.preventDefault();
+    let errorSubmit = false;
+
     // Je passe la preview a false au cas ou l'utilisateur ne l'a pas fermé
     setPreviewIsOpen(false);
     // Je remets à zéro mes erreurs avant chaque verification de champs pour l'envoie des données
     setErrorForm((prevState) => ({ duration: "", person: "", ingredient: "" }));
 
     // Je vérifie que j'ai bien des ingrédients dans ma liste pour la nouvelle recette
-    if (ingredientsForRecipe.length === 0) {
+    if (newRecipe.ingredientsForRecipe.length === 0) {
+      errorSubmit = true;
       setErrorForm((prevState) => ({
         ...prevState,
         ingredient: "Merci d'ajouter des ingrédients",
@@ -177,17 +171,15 @@ const AddRecipe = () => {
 
     // Constitution du FormData pour l'envoie des données à l'API
     const formData = new FormData();
-    formData.append("title", recipeTitle);
-    formData.append("file", selectedFile);
+    formData.append("title", newRecipe.recipeTitle);
+    formData.append("file", newRecipe.selectedFile);
     formData.append("description", editor.getHTML());
-
-    // A TERMINER MODIFICATION DU FORMDATA AVEC LES NOUVELLES ENTREE BDD
-    formData.append("level", level);
-    formData.append("duration", duration);
-    formData.append("person", person);
+    formData.append("level", newRecipe.level);
+    formData.append("duration", newRecipe.duration);
+    formData.append("person", newRecipe.person);
 
     // Je dois créer une nouvelle entrée de mon formData par ingrédient dans ma liste
-    ingredientsForRecipe.forEach((ingredient, index) => {
+    newRecipe.ingredientsForRecipe.forEach((ingredient, index) => {
       formData.append(`ingredient_${index}`, JSON.stringify(ingredient));
     });
 
@@ -195,20 +187,22 @@ const AddRecipe = () => {
     for (let data of formData) {
       switch (data[0]) {
         case "duration":
-          if (data[1] === "0") {
+          if (data[1] === "0" || data[1] === 0) {
             setErrorForm((prevState) => ({
               ...prevState,
               duration: "La durée ne peut être à 0",
             }));
+            errorSubmit = true;
           }
           break;
 
         case "person":
-          if (data[1] === "0") {
+          if (data[1] === "0" || data[1] === 0) {
             setErrorForm((prevState) => ({
               ...prevState,
               person: "La recette doit être pour minimum une personne",
             }));
+            errorSubmit = true;
           }
           break;
         default:
@@ -216,22 +210,23 @@ const AddRecipe = () => {
       }
     }
 
-    const resultCreateRecipe = await createRecipe(formData);
-    if (resultCreateRecipe.status === 201) {
-      toast.success("Recette créee ! Redirection en cours...");
-      setErrorForm((prevState) => ({
-        ...prevState,
-        duration: "",
-        person: "",
-        ingredient: "",
-      }));
-      setTimeout(() => {
-        router.push(`/recipes/${resultCreateRecipe.data.recipe_id}`);
-      }, 1500);
-    } else {
-      toast.warning(
-        "Création de la recette impossible. Merci de vous reconnecter !"
-      );
+    //Je valide le formulaire s'il n'y a pas d'erreurs
+    if (!errorSubmit) {
+      const resultCreateRecipe = await createRecipe(formData);
+      if (resultCreateRecipe.status === 201) {
+        toast.success("Recette créee ! Redirection en cours...");
+        setErrorForm((prevState) => ({
+          ...prevState,
+          duration: "",
+          person: "",
+          ingredient: "",
+        }));
+        setTimeout(() => {
+          router.push(`/recipes/${resultCreateRecipe.data.recipe_id}`);
+        }, 1500);
+      } else {
+        toast.warning("Création de la recette impossible. Merci de vous reconnecter !");
+      }
     }
   };
 
@@ -239,16 +234,11 @@ const AddRecipe = () => {
     <>
       <section className="my-2 bg-slate-800 text-white p-2 rounded-lg shadow-md relative">
         <h3 className="text-lg text-center ">
-          Envie de partager vos talents culinaire avec la communauté ? Vous êtes
-          au bon endroit ! A vous de jouer !
+          Envie de partager vos talents culinaire avec la communauté ? Vous êtes au bon endroit ! A vous de jouer !
         </h3>
       </section>
       <section>
-        <form
-          onSubmit={handleSubmit}
-          className="py-2"
-          encType="multipart/form-data"
-        >
+        <form onSubmit={handleSubmit} className="py-2" encType="multipart/form-data">
           <div className="flex flex-col gap-2 sm:flex-row sm:justify-between my-2 ">
             <article className="bg-white hover:bg-slate-50 border border-slate-300 shadow-md p-2 rounded-lg">
               <label className="flex flex-col items-center">
@@ -259,15 +249,13 @@ const AddRecipe = () => {
                   placeholder="Ma super recette"
                   name="title"
                   id="title"
-                  value={recipeTitle}
+                  value={newRecipe.recipeTitle}
                   onChange={handleChangeTitle}
                   required
                 />
               </label>
               <label className="flex-col items-center">
-                <p className="py-2">
-                  Sublimer la recette avec une jolie photo:{" "}
-                </p>
+                <p className="py-2">Sublimer la recette avec une jolie photo: </p>
                 <input
                   type="file"
                   id="file"
@@ -285,16 +273,14 @@ const AddRecipe = () => {
                   className="bg-slate-200 text-black rounded-md w-[2.5rem] text-center border border-slate-300"
                   type="number"
                   placeholder="0"
-                  value={duration}
+                  value={newRecipe.duration}
                   onChange={handleChangeDuration}
                   required
                 />
               </label>
 
               {errorForm.duration !== "" && (
-                <p className="text-xs font-bold bg-red-200 p-1 rounded text-red-800">
-                  {errorForm.duration}
-                </p>
+                <p className="text-xs font-bold bg-red-200 p-1 rounded text-red-800">{errorForm.duration}</p>
               )}
 
               <label className="py-1">
@@ -303,21 +289,19 @@ const AddRecipe = () => {
                   className="bg-slate-200 text-black rounded-md w-[2.5rem] text-center border border-slate-300"
                   type="number"
                   placeholder="0"
-                  value={person}
+                  value={newRecipe.person}
                   onChange={handleChangePerson}
                   required
                 />
               </label>
               {errorForm.person !== "" && (
-                <p className="text-xs font-bold bg-red-200 p-1 rounded text-red-800">
-                  {errorForm.person}
-                </p>
+                <p className="text-xs font-bold bg-red-200 p-1 rounded text-red-800">{errorForm.person}</p>
               )}
               <label>
                 Difficulté de la recette:{" "}
                 <select
                   type="option"
-                  value={level}
+                  value={newRecipe.level}
                   onChange={handleChangeLevel}
                   className="bg-slate-200 text-black rounded-md border border-slate-300"
                   required
@@ -334,16 +318,13 @@ const AddRecipe = () => {
               <select
                 className="bg-slate-200 text-black rounded-md border border-slate-300"
                 type="option"
-                value={selectIngredient.name}
+                value={newRecipe.selectIngredient.name}
                 onChange={handleChangeSelectedIngredient}
               >
                 <option>-- Merci de sélectionner un ingrédient --</option>
                 {ingredientsList?.length > 0
                   ? ingredientsList.map((ingredient) => (
-                      <option
-                        key={ingredient.ingredient_id}
-                        id={ingredient.ingredient_id}
-                      >
+                      <option key={ingredient.ingredient_id} id={ingredient.ingredient_id}>
                         {ingredient.ingredient_name}
                       </option>
                     ))
@@ -354,14 +335,14 @@ const AddRecipe = () => {
                 <input
                   type="number"
                   placeholder="0"
-                  value={quantity}
+                  value={newRecipe.quantity}
                   onChange={handleChangeQuantity}
                   className="bg-slate-200 text-black rounded-md w-[2.5rem] text-center border border-slate-300"
                 />
                 <select
                   type="option"
                   className="bg-slate-200 text-black rounded-md border border-slate-300"
-                  value={unit}
+                  value={newRecipe.unit}
                   onChange={handleChangeUnit}
                 >
                   <option></option>
@@ -382,15 +363,13 @@ const AddRecipe = () => {
                 Ajouter l&apos;ingrédient
               </button>
               {errorForm.ingredient !== "" && (
-                <p className="text-xs font-bold bg-red-200 p-1 rounded text-red-800">
-                  {errorForm.ingredient}
-                </p>
+                <p className="text-xs font-bold bg-red-200 p-1 rounded text-red-800">{errorForm.ingredient}</p>
               )}
             </article>
             <article className="bg-white hover:bg-slate-50 border border-slate-300 shadow-md p-2 rounded-lg sm:w-80">
               <p>Vos ingrédients : </p>
               <div className="overflow-y-auto max-h-[7rem] my-2">
-                {ingredientsForRecipe.map((ingredient) => (
+                {newRecipe.ingredientsForRecipe.map((ingredient) => (
                   <li className="flex gap-2" key={ingredient.id}>
                     <button
                       type="button"
@@ -408,18 +387,13 @@ const AddRecipe = () => {
 
           <div className="my-8 bg-white border border-slate-300 p-2 rounded-lg shadow-md">
             <label className="flex-col">
-              <p className="my-2 text-lg">
-                Rédigez votre recette grâce à l&apos;outil ci-dessous :
-              </p>
+              <p className="my-2 text-lg">Rédigez votre recette grâce à l&apos;outil ci-dessous :</p>
               <Tiptap editor={editor} />
             </label>
           </div>
 
           <div className="container flex flex-row gap-4 justify-center mt-4">
-            <button
-              type="submit"
-              className="rounded bg-green-600 text-white border p-2 shadow-md"
-            >
+            <button type="submit" className="rounded bg-green-600 text-white border p-2 shadow-md">
               Valider la recette
             </button>
             <button
@@ -429,10 +403,7 @@ const AddRecipe = () => {
             >
               Aperçu de la recette
             </button>
-            <button
-              type="reset"
-              className="rounded bg-red-800 text-white border p-2 shadow-md"
-            >
+            <button type="reset" className="rounded bg-red-800 text-white border p-2 shadow-md">
               Annuler
             </button>
           </div>
@@ -441,13 +412,13 @@ const AddRecipe = () => {
         {previewIsOpen && (
           <PreviewRecipe
             setPreviewIsOpen={setPreviewIsOpen}
-            recipeTitle={recipeTitle}
-            recipeImage={!selectedFile ? "" : URL.createObjectURL(selectedFile)}
+            recipeTitle={newRecipe.recipeTitle}
+            recipeImage={!newRecipe.selectedFile ? "" : URL.createObjectURL(newRecipe.selectedFile)}
             recipeDescription={editor.getHTML()}
-            recipeIngredients={ingredientsForRecipe}
-            recipePerson={person}
-            recipeDuration={duration}
-            recipeLevel={level}
+            recipeIngredients={newRecipe.ingredientsForRecipe}
+            recipePerson={newRecipe.person}
+            recipeDuration={newRecipe.duration}
+            recipeLevel={newRecipe.level}
             recipeAuthor={`${user.firstname} ${user.lastname}`}
           />
         )}
@@ -456,4 +427,4 @@ const AddRecipe = () => {
   );
 };
 
-export default AddRecipe;
+export default CreateRecipeForm;
