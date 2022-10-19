@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 // Import own module
 import { useClickOutSide } from "../../hooks/useClickOutSide";
 import { getRecipeByName } from "../../axios/recipe/axios_recipe";
-import CardRecipe from "../CardRecipe/CardRecipe";
 
 const SearchBar = ({ searchBarIsOpen, setSearchBarIsOpen }) => {
   const refSearchBar = useClickOutSide(() => setSearchBarIsOpen(false));
@@ -53,14 +52,14 @@ const SearchBar = ({ searchBarIsOpen, setSearchBarIsOpen }) => {
             <>
               <h3 className="text-xl">Résultat de votre recherche: </h3>
               <div className="flex flex-col gap-2">
-                {recipes.map((oneRecipe) => (
+                {/* {recipes.map((oneRecipe) => (
                   <CardRecipe
                     key={oneRecipe.recipe_id}
                     searchBarIsOpen={searchBarIsOpen}
                     setSearchBarIsOpen={setSearchBarIsOpen}
                     {...oneRecipe}
                   />
-                ))}
+                ))} */}
               </div>
             </>
           )}
