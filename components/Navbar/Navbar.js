@@ -71,10 +71,7 @@ const Navbar = () => {
       </section>
 
       <Menu isOpen={isOpen} setIsOpen={setIsOpen} />
-      <SearchBar
-        searchBarIsOpen={searchBarIsOpen}
-        setSearchBarIsOpen={setSearchBarIsOpen}
-      />
+      <SearchBar searchBarIsOpen={searchBarIsOpen} setSearchBarIsOpen={setSearchBarIsOpen} />
     </header>
   );
 };

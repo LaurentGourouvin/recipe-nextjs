@@ -26,9 +26,7 @@ const Menu = ({ isOpen, setIsOpen }) => {
     <div
       ref={refMenu}
       className={`bg-slate-50 fixed h-full w-full md:w-1/6 
-    ${
-      !isOpen ? "-translate-x-full" : "-translate-x-0"
-    } duration-300 md:shadow-2xl`}
+    ${!isOpen ? "-translate-x-full" : "-translate-x-0"} duration-300 md:shadow-2xl`}
     >
       <section className="menu-header">
         {!isLogged && (
@@ -81,16 +79,14 @@ const Menu = ({ isOpen, setIsOpen }) => {
       <main className="container p-3 text-slate-600 mx-auto">
         {!isLogged && (
           <p>
-            Decouvrez des recettes du monde entier, partagées par notre
-            communauté en créant votre profil
+            Decouvrez des recettes du monde entier, partagées par notre communauté en créant votre profil
             <span className="text-rose-600 italic"> Recipe.</span>
           </p>
         )}
         {isLogged && (
           <>
             <p className="text-black">
-              Bonjour{" "}
-              <span className="italic text-red-500">{`${user.firstname} ${user.lastname}`}</span>
+              Bonjour <span className="italic text-red-500">{`${user.firstname} ${user.lastname}`}</span>
             </p>
             <ul className="pl-2 text-sm mt-3">
               <Link href="/profile">
@@ -171,9 +167,6 @@ const Menu = ({ isOpen, setIsOpen }) => {
           </li>
           <li className="menu-items">
             <p className="menu-items-content">
-              <Link href="#">
-                <a onClick={() => setIsOpen(false)}>Recettes par catégories</a>
-              </Link>
               <span>
                 <ChevrontRight />
               </span>
